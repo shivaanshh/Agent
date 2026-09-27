@@ -1,0 +1,8 @@
+[
+  {"id": "agents-week", "goal": "Research and summarize the top 3 developments in AI agents from the last week", "inject": []},
+  {"id": "agents-week-outage", "goal": "Research and summarize the top 3 developments in AI agents from the last week",
+   "inject": ["ddgs:error:*", "fetch_page:timeout:1"]},
+  {"id": "compare-numbers", "goal": "Compare the most recent quarterly revenue of Nvidia and AMD and compute the ratio", "inject": []},
+  {"id": "ambiguous", "goal": "Tell me the latest about Python", "inject": []},
+  {"id": "llm-garbage", "goal": "What happened in open-source LLM releases this week?", "inject": ["llm:bad_json:2"]}
+]

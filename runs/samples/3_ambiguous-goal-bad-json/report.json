@@ -1,0 +1,394 @@
+{
+  "goal": "Tell me the latest about Python",
+  "generated_at": "2026-09-23T08:20:35",
+  "model": "openai/gpt-oss-20b",
+  "title": "Latest Developments in Python (2026‑09‑23)",
+  "executive_summary": "Python’s most recent maintenance release is 3.14.7, adding nearly 500 bug‑fixes and build improvements. The 3.15 series introduced significant new features such as lazy‑imports and a free‑threaded build that enhance performance and parallelism. The Python Software Foundation is now focusing on the upcoming 3.16 release, with a clear roadmap and milestone schedule. Fedora Linux 45 Beta’s inclusion of Python 3.15 demonstrates industry adoption of these new capabilities.",
+  "findings": [
+    {
+      "title": "Python 3.14.7 Maintenance Release",
+      "summary": "Released on August 5 2026, Python 3.14.7 includes roughly 499 bug‑fixes, build improvements, and documentation updates from 86 contributors, marking the latest update in the 3.14 series.",
+      "date": "2026-08-05",
+      "why_it_matters": "It keeps the long‑term supported 3.14 line stable and secure for production environments.",
+      "sources": [
+        {
+          "url": "https://www.python.org/downloads/release/python-3147/",
+          "verified": true
+        },
+        {
+          "url": "https://blog.python.org/2026/08/python-3147-31315/",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "title": "Python 3.15 New Features",
+      "summary": "Python 3.15 introduced lazy‑imports, deferring module resolution until first use, and a free‑threaded build that enables true parallelism in multi‑threaded programs, both improving performance.",
+      "date": "2026-09-18",
+      "why_it_matters": "These features reduce startup time and unlock better concurrency for applications, making Python more competitive for high‑performance workloads.",
+      "sources": [
+        {
+          "url": "https://www.infoworld.com/article/4222329/supercharge-your-programming-skills-with-python-superpowers.html",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "title": "Python 3.16 Roadmap",
+      "summary": "The Python Software Foundation’s development guide now designates Python 3.16 as the next major release, with PEP 826 outlining milestones and expected dates for the 3.16 series.",
+      "date": null,
+      "why_it_matters": "It signals the direction of future language evolution and helps developers plan upgrades and new feature adoption.",
+      "sources": [
+        {
+          "url": "https://devguide.python.org/versions/",
+          "verified": true
+        },
+        {
+          "url": "https://peps.python.org/pep-0826/",
+          "verified": true
+        },
+        {
+          "url": "https://docs.python.org/3.16/whatsnew/3.16.html",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "title": "Fedora Linux 45 Beta Ships with Python 3.15",
+      "summary": "Fedora Linux 45 Beta, released September 17 2026, includes Python 3.15, GCC 16.2, and major security updates, indicating widespread adoption of the new Python features.",
+      "date": "2026-09-17",
+      "why_it_matters": "It demonstrates real‑world deployment of Python 3.15, validating its stability and performance improvements for enterprise Linux distributions.",
+      "sources": [
+        {
+          "url": "https://www.linuxjournal.com/content/fedora-linux-45-beta-released-python-315-gcc",
+          "verified": false
+        }
+      ]
+    }
+  ],
+  "confidence": "medium",
+  "confidence_reason": "",
+  "understanding": "Research the goal using a generic search-read-analyse plan: Tell me the latest about Python",
+  "ambiguities": [],
+  "assumptions": [
+    "The planner LLM output was unusable, so a generic research plan is used."
+  ],
+  "limitations": [
+    "Some sources lack explicit publication dates; the exact release date for Python 3.15 is inferred from article context. The Fedora article URL appears truncated, limiting full verification. No direct primary source for Python 3.15 release date was found."
+  ],
+  "execution": {
+    "steps": [
+      {
+        "id": 1,
+        "title": "Search recent news",
+        "status": "passed",
+        "attempts": 1,
+        "tools": [
+          "news_search",
+          "web_search",
+          "news_search"
+        ],
+        "review": "All three results are dated within the last 7 days, contain specific URLs, and are relevant to Python news."
+      },
+      {
+        "id": 2,
+        "title": "Background web search",
+        "status": "passed",
+        "attempts": 2,
+        "tools": [
+          "web_search",
+          "web_search",
+          "web_search",
+          "web_search"
+        ],
+        "review": "Provided multiple concrete URLs from official Python sources that meet the criteria."
+      },
+      {
+        "id": 3,
+        "title": "Read key sources",
+        "status": "passed",
+        "attempts": 2,
+        "tools": [
+          "fetch_page (failed)",
+          "web_search",
+          "fetch_page",
+          "fetch_page (failed)",
+          "web_search",
+          "fetch_page"
+        ],
+        "review": "The result provides concrete facts (title, publication date, specific Python features, version number, and performance details) from the fetched page."
+      },
+      {
+        "id": 4,
+        "title": "Analyse and rank findings",
+        "status": "passed",
+        "attempts": 2,
+        "tools": [],
+        "review": "The response provides a clear, ranked list of findings with specific details and cites sources for each item."
+      }
+    ],
+    "replans": [],
+    "recoveries": [
+      {
+        "kind": "json_repair",
+        "step_id": null,
+        "target": "Plan",
+        "error": "reply contains no JSON object"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": null,
+        "target": "Plan",
+        "error": "reply contains no JSON object"
+      },
+      {
+        "kind": "fallback_plan",
+        "step_id": null,
+        "reason": "Plan still invalid after 2 repairs: plan must have 2-6 steps, got 1"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 52.0,
+        "window_tokens": 4647,
+        "request_estimate": 2573
+      },
+      {
+        "kind": "provider_fallback",
+        "step_id": 1,
+        "tool": "news_search",
+        "failed": "ddgs",
+        "next": "google_news",
+        "error": "ddgs: DDGSException: No results found."
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 1.4,
+        "window_tokens": 6143,
+        "request_estimate": 1082
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 2,
+        "wait_s": 55.2,
+        "window_tokens": 6115,
+        "request_estimate": 2280
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 2,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "step_retry",
+        "step_id": 2,
+        "reason": "No URLs provided, only text summary."
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 2,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 2,
+        "wait_s": 54.0,
+        "window_tokens": 4819,
+        "request_estimate": 2758
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 2,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 2,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 2,
+        "wait_s": 1.5,
+        "error": "tokens per minute: limit 8000, used 5546, requested 2466"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 2,
+        "wait_s": 48.2,
+        "window_tokens": 4356,
+        "request_estimate": 3686
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 3,
+        "wait_s": 7.7,
+        "window_tokens": 6227,
+        "request_estimate": 2078
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 3,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 3,
+        "wait_s": 51.1,
+        "window_tokens": 5510,
+        "request_estimate": 2465
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 3,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 3,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 3,
+        "wait_s": 54.1,
+        "window_tokens": 5369,
+        "request_estimate": 3607
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 3,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "forced_finish",
+        "step_id": 3,
+        "limit": 4
+      },
+      {
+        "kind": "step_retry",
+        "step_id": 3,
+        "reason": "The summary lists generic features but lacks concrete, specific facts (e.g., exact release dates, version numbers, or qu"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 3,
+        "wait_s": 57.2,
+        "window_tokens": 6330,
+        "request_estimate": 2330
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 3,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 3,
+        "target": "AgentAction",
+        "error": "action: Input should be 'call_tool' or 'finish'"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 3,
+        "wait_s": 1.9,
+        "window_tokens": 5278,
+        "request_estimate": 2463
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 3,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 3,
+        "wait_s": 3.5,
+        "error": "tokens per minute: limit 8000, used 6255, requested 2078"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 3,
+        "wait_s": 49.2,
+        "window_tokens": 5066,
+        "request_estimate": 3479
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 4,
+        "wait_s": 9.7,
+        "window_tokens": 6721,
+        "request_estimate": 2220
+      },
+      {
+        "kind": "step_retry",
+        "step_id": 4,
+        "reason": "The result contains duplicate and potentially malformed source URLs, and does not clearly reference earlier results or p"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 4,
+        "wait_s": 47.9,
+        "window_tokens": 6341,
+        "request_estimate": 2410
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 4,
+        "wait_s": 11.0,
+        "window_tokens": 6061,
+        "request_estimate": 3532
+      }
+    ],
+    "injected_faults": [
+      "llm:bad_json:2"
+    ]
+  },
+  "grounding": {
+    "cited_sources": 7,
+    "verified_sources": 6,
+    "rate": 0.86,
+    "note": "verified = the URL was actually returned by a tool during this run",
+    "window_days": null,
+    "findings_outside_window": 0
+  },
+  "stats": {
+    "duration_s": 556.2,
+    "steps_passed": 4,
+    "steps_total": 4,
+    "tool_calls": 13,
+    "tool_failures": 2,
+    "recoveries": 38,
+    "llm_calls": 32,
+    "tokens": 52348
+  }
+}

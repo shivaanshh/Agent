@@ -1,0 +1,273 @@
+┌─────────────────────────────────────────────────── GOAL ───────────────────────────────────────────────────┐
+│ Tell me the latest about Python                                                                            │
+│ model: openai/gpt-oss-20b  |  injected faults: llm:bad_json:2                                              │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  ↻ RECOVERY repairing invalid LLM JSON target=Plan, error=reply contains no JSON object
+  ↻ RECOVERY repairing invalid LLM JSON target=Plan, error=reply contains no JSON object
+  ↻ RECOVERY using fallback plan reason=Plan still invalid after 2 repairs: plan must have 2-6 steps, got 1
+
+PLAN  Research the goal using a generic search-read-analyse plan: Tell me the latest about Python
+  assumption: The planner LLM output was unusable, so a generic research plan is used.
+┌──┬───────────────────────────┬─────────────┬─────────────────────────────────────────────────────────────┐
+│# │ step                      │ tool        │ done when                                                   │
+├──┼───────────────────────────┼─────────────┼─────────────────────────────────────────────────────────────┤
+│1 │ Search recent news        │ news_search │ At least 3 relevant, dated results with URLs                │
+│2 │ Background web search     │ web_search  │ At least 2 relevant sources with URLs                       │
+│3 │ Read key sources          │ fetch_page  │ Concrete facts (names, dates, numbers) from at least one pa…│
+│4 │ Analyse and rank findings │ none        │ A ranked list of findings, each tied to a source            │
+└──┴───────────────────────────┴─────────────┴─────────────────────────────────────────────────────────────┘
+
+── Step 1/4: Search recent news
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Search recent news about Python
+  → news_search(query=Python programming language latest news, days=7, max_results=8)
+    ✓ 3 news results for 'Python programming language latest news' (last 7 days, newest first): (1938 ms)
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Search for recent Python news beyond generic results
+  → web_search(query=Python 3.12 release 2026, max_results=6)
+    ✓ 6 web results for 'Python 3.12 release 2026': (2734 ms)
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=52.0, window_tokens=4647, request_estimate=2573
+  think: Search for recent Python 3.15 release news
+  → news_search(query=Python 3.15 release September 2026, days=7, max_results=8)
+  ↻ RECOVERY switching search provider tool=news_search, failed=ddgs, next=google_news, error=ddgs: 
+DDGSException: No results found.
+    ✓ 3 news results for 'Python 3.15 release September 2026' (last 7 days, newest first): (1625 ms)
+  think: Provide the three recent news items about Python
+  result: 1. **InfoWorld** – "Supercharge your programming skills with Python superpowers" (2026‑09‑18). URL: 
+https://news.google.com/rss/articles/CBMiqgFBVV95cUxNNi14bmtmMHI0NnhsNnF3VjcwQmtQaFlyMk9MRXdyeDJXRHRpVEVUTWRoW
+lF3LWRUM0xCcTEzQ0hxMVg5aldrUmN6Vy0tTkVpNjk1OHZhQn…
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=1.4, window_tokens=6143, request_estimate=1082
+  ✔ review passed All three results are dated within the last 7 days, contain specific URLs, and are relevant 
+to Python news.
+
+── Step 2/4: Background web search
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=55.2, window_tokens=6115, request_estimate=2280
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Searching web for recent Python developments
+  → web_search(query=latest Python 2026, max_results=6)
+    ✓ 6 web results for 'latest Python 2026': (1639 ms)
+  think: Provide latest Python info with two sources
+  result: Python’s most recent stable release is **Python 3.14.7**, released on August 5, 2026. It includes 
+numerous bug‑fixes and security patches, and is available for all major platforms (Windows, macOS, Linux) via 
+the official download pages. The Python community i…
+  ✘ review failed: No URLs provided, only text summary.
+  ↻ RECOVERY retrying step with reviewer feedback reason=No URLs provided, only text summary.
+
+── Step 2/4: Background web search (attempt 2)
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Need to perform web search for Python 3.14.7 release and Python 3.16 roadmap
+  → web_search(query=Python 3.14.7 release, max_results=6)
+    ✓ 6 web results for 'Python 3.14.7 release': (2547 ms)
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=54.0, window_tokens=4819, request_estimate=2758
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Search for Python 3.16 roadmap
+  → web_search(query=Python 3.16 roadmap, max_results=6)
+    ✓ 6 web results for 'Python 3.16 roadmap': (6405 ms)
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  ↻ RECOVERY rate limited, backing off wait_s=1.5, error=tokens per minute: limit 8000, used 5546, requested 
+2466
+  think: Need to call web_search for official Python 3.16 roadmap
+  → web_search(query=Python 3.16 roadmap python.org, max_results=5)
+    ✓ 5 web results for 'Python 3.16 roadmap python.org': (3063 ms)
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=48.2, window_tokens=4356, request_estimate=3686
+  think: Collected official sources for latest Python releases and roadmap
+  result: **Latest Python news (as of 2026‑09‑23)** 1. **Python 3.14.7** – The seventh maintenance release of 
+the 3.14 series was published on August 5 2026. It includes roughly 499 bug‑fixes, build improvements, and 
+documentation updates from 86 contributors since 3.1…
+  ✔ review passed Provided multiple concrete URLs from official Python sources that meet the criteria.
+
+── Step 3/4: Read key sources
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=7.7, window_tokens=6227, request_estimate=2078
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Fetching the InfoWorld article to extract key facts about Python.
+  → fetch_page(url=https://news.google.com/rss/articles/CBMiqgFBVV95cUxNNi14bm…, max_chars=2500)
+    ✗ Google News redirect links can't be fetched directly; search for the headline with web_search to find 
+the publisher's URL (16 ms)
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=51.1, window_tokens=5510, request_estimate=2465
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Search for the InfoWorld article via web search to get a direct URL.
+  → web_search(query=InfoWorld "Supercharge your programming skills with Python …, max_results=5)
+    ✓ 3 web results for 'InfoWorld "Supercharge your programming skills with Python superpowers… (3469 ms)
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Fetching the InfoWorld article to extract key facts.
+  → fetch_page(url=https://www.infoworld.com/article/4222329/supercharge-your-…, max_chars=2500)
+    ✓ TITLE: Supercharge your programming skills with Python superpowers | InfoWorld (1655 ms)
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=54.1, window_tokens=5369, request_estimate=3607
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  think: Fetching the Linux Journal article to extract key facts.
+  → fetch_page(url=https://www.linuxjournal.com/content/fedora-linux-45-beta-r…, max_chars=2500)
+    ✗ HTTP 404 from www.linuxjournal.com (1969 ms)
+  ↻ RECOVERY action limit reached, forcing summary limit=4
+  think: No more tool calls available. Summarise findings and note missing details.
+  result: From the InfoWorld article (2026‑09‑18) the key Python updates highlighted are: • Dataclasses 
+simplify class boilerplate. • Editable installs enable sharing and updating local packages across projects. • 
+Virtual environments isolate project dependencies. • A …
+  ✘ review failed: The summary lists generic features but lacks concrete, specific facts (e.g., exact release 
+dates, version numbers, or quantitative details) from the fetched pa…
+  ↻ RECOVERY retrying step with reviewer feedback reason=The summary lists generic features but lacks 
+concrete, specific facts…
+
+── Step 3/4: Read key sources (attempt 2)
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=57.2, window_tokens=6330, request_estimate=2330
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Input should be 'call_tool' or 
+'finish'
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=1.9, window_tokens=5278, request_estimate=2463
+  think: Search for the InfoWorld article
+  → web_search(query=InfoWorld "Supercharge your programming skills with Python …, max_results=5)
+    ✓ 3 web results for 'InfoWorld "Supercharge your programming skills with Python superpowers… (4000 ms)
+  ↻ RECOVERY repairing invalid LLM JSON target=AgentAction, error=action: Field required
+  ↻ RECOVERY rate limited, backing off wait_s=3.5, error=tokens per minute: limit 8000, used 6255, requested 
+2078
+  think: Fetch the InfoWorld article
+  → fetch_page(url=https://www.infoworld.com/article/4222329/supercharge-your-…, max_chars=2500)
+    ✓ TITLE: Supercharge your programming skills with Python superpowers | InfoWorld (202 ms)
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=49.2, window_tokens=5066, request_estimate=3479
+  think: Extract concrete facts from the fetched page
+  result: - Article title: "Supercharge your programming skills with Python superpowers" (InfoWorld). - 
+Publication date: 2026‑09‑18. - Key Python features highlighted: dataclasses, editable installs, virtual 
+environments, and a free‑threaded Python build that improves…
+  ✔ review passed The result provides concrete facts (title, publication date, specific Python features, 
+version number, and performance …
+
+── Step 4/4: Analyse and rank findings
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=9.7, window_tokens=6721, request_estimate=2220
+  think: Compile findings from steps 1‑3, rank by relevance to the goal (latest Python news).
+  result: **Ranked latest Python findings (as of 2026‑09‑23)** 1. **Python 3.15 release** – Fedora Linux 45 
+Beta announced Python 3.15 as the default interpreter, highlighting the new *lazy‑imports* feature that 
+reduces startup time for modules that are rarely used. (S…
+  ✘ review failed: The result contains duplicate and potentially malformed source URLs, and does not clearly 
+reference earlier results or provide distinct, verifiable evidence fo…
+  ↻ RECOVERY retrying step with reviewer feedback reason=The result contains duplicate and potentially 
+malformed source URLs, …
+
+── Step 4/4: Analyse and rank findings (attempt 2)
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=47.9, window_tokens=6341, request_estimate=2410
+  think: Compile a concise, ranked list of the most significant recent Python developments, citing the 
+specific URLs from the earlier steps. Ensure each finding is unique, directly referenced, and the URLs ar…
+  result: **Ranked Findings on Python (as of 2026‑09‑23)** 1. **Python 3.14.7 Maintenance Release** – The 
+latest 3.14 maintenance release (3.14.7) was published on August 5 2026, adding ~499 bug‑fixes, build 
+improvements, and documentation updates from 86 contributors.…
+  ✔ review passed The response provides a clear, ranked list of findings with specific details and cites 
+sources for each item.
+
+Writing final report…
+  ↻ RECOVERY pacing under tokens-per-minute limit wait_s=11.0, window_tokens=6061, request_estimate=3532
+──────────────────────────────────────────────── FINAL REPORT ────────────────────────────────────────────────
+                                  Latest Developments in Python (2026‑09‑23)                                  
+
+▌ Goal: Tell me the latest about Python                                                                     
+▌ Generated 2026-09-23T08:20:35 · model openai/gpt-oss-20b · confidence medium                              
+
+Summary                                                                                                       
+
+Python’s most recent maintenance release is 3.14.7, adding nearly 500 bug‑fixes and build improvements. The   
+3.15 series introduced significant new features such as lazy‑imports and a free‑threaded build that enhance   
+performance and parallelism. The Python Software Foundation is now focusing on the upcoming 3.16 release, with
+a clear roadmap and milestone schedule. Fedora Linux 45 Beta’s inclusion of Python 3.15 demonstrates industry 
+adoption of these new capabilities.                                                                           
+
+Findings                                                                                                      
+
+1. Python 3.14.7 Maintenance Release (2026-08-05)                                                             
+
+Released on August 5 2026, Python 3.14.7 includes roughly 499 bug‑fixes, build improvements, and documentation
+updates from 86 contributors, marking the latest update in the 3.14 series.                                   
+
+Why it matters: It keeps the long‑term supported 3.14 line stable and secure for production environments.     
+
+Sources: www.python.org · blog.python.org                                                                     
+
+2. Python 3.15 New Features (2026-09-18)                                                                      
+
+Python 3.15 introduced lazy‑imports, deferring module resolution until first use, and a free‑threaded build   
+that enables true parallelism in multi‑threaded programs, both improving performance.                         
+
+Why it matters: These features reduce startup time and unlock better concurrency for applications, making     
+Python more competitive for high‑performance workloads.                                                       
+
+Sources: www.infoworld.com                                                                                    
+
+3. Python 3.16 Roadmap                                                                                        
+
+The Python Software Foundation’s development guide now designates Python 3.16 as the next major release, with 
+PEP 826 outlining milestones and expected dates for the 3.16 series.                                          
+
+Why it matters: It signals the direction of future language evolution and helps developers plan upgrades and  
+new feature adoption.                                                                                         
+
+Sources: devguide.python.org · peps.python.org · docs.python.org                                              
+
+4. Fedora Linux 45 Beta Ships with Python 3.15 (2026-09-17)                                                   
+
+Fedora Linux 45 Beta, released September 17 2026, includes Python 3.15, GCC 16.2, and major security updates, 
+indicating widespread adoption of the new Python features.                                                    
+
+Why it matters: It demonstrates real‑world deployment of Python 3.15, validating its stability and performance
+improvements for enterprise Linux distributions.                                                              
+
+Sources: www.linuxjournal.com ⚠️ unverified                                                                   
+
+Confidence                                                                                                    
+
+medium:                                                                                                       
+
+Assumptions & ambiguities                                                                                     
+
+ • Assumed: The planner LLM output was unusable, so a generic research plan is used.                          
+
+Limitations                                                                                                   
+
+ • Some sources lack explicit publication dates; the exact release date for Python 3.15 is inferred from      
+   article context. The Fedora article URL appears truncated, limiting full verification. No direct primary   
+   source for Python 3.15 release date was found.                                                             
+
+How the agent got here                                                                                        
+
+                                                                                                              
+ #  Step                       Status     Attempts  Tools                                                     
+ ──────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ 1  Search recent news         ✅ passed  1         news_search, web_search, news_search                      
+ 2  Background web search      ✅ passed  2         web_search, web_search, web_search, web_search            
+ 3  Read key sources           ✅ passed  2         fetch_page (failed), web_search, fetch_page, fetch_page   
+                                                    (failed), web_search, fetch_page                          
+ 4  Analyse and rank findings  ✅ passed  2         -                                                         
+                                                                                                              
+
+Recoveries: json_repair ×16, llm_throttle ×14, step_retry ×3, llm_rate_limit ×2, fallback_plan ×1,            
+provider_fallback ×1, forced_finish ×1                                                                        
+
+ • json_repair (run): target=Plan, error=reply contains no JSON object                                        
+ • json_repair (run): target=Plan, error=reply contains no JSON object                                        
+ • fallback_plan (run): reason=Plan still invalid after 2 repairs: plan must have 2-6 steps, got 1            
+ • json_repair (step 1): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 1): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 1): target=AgentAction, error=action: Field required                                     
+ • provider_fallback (step 1): tool=news_search, failed=ddgs, next=google_news, error=ddgs: DDGSException: No 
+   results found.                                                                                             
+ • json_repair (step 2): target=AgentAction, error=action: Field required                                     
+ • step_retry (step 2): reason=No URLs provided, only text summary.                                           
+ • json_repair (step 2): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 2): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 2): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 3): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 3): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 3): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 3): target=AgentAction, error=action: Field required                                     
+ • forced_finish (step 3): limit=4                                                                            
+ • step_retry (step 3): reason=The summary lists generic features but lacks concrete, specific facts (e.g.,   
+   exact release dates, version numbers, or qu                                                                
+ • json_repair (step 3): target=AgentAction, error=action: Field required                                     
+ • json_repair (step 3): target=AgentAction, error=action: Input should be 'call_tool' or 'finish'            
+ • json_repair (step 3): target=AgentAction, error=action: Field required                                     
+ • step_retry (step 4): reason=The result contains duplicate and potentially malformed source URLs, and does  
+   not clearly reference earlier results or p                                                                 
+
+Deliberately injected faults: llm:bad_json:2                                                                  
+
+Run stats                                                                                                     
+
+ • Steps passed: 4/4 · tool calls: 13 (2 failed) · recoveries: 38                                             
+ • LLM calls: 32 · tokens: 52,348 · duration: 556.2s                                                          
+ • Source grounding: 6/7 cited URLs were returned by tools during the run                                     

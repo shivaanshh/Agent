@@ -1,0 +1,508 @@
+{
+  "goal": "What happened in open-source LLM releases this week?",
+  "generated_at": "2026-09-23T19:41:24",
+  "model": "openai/gpt-oss-20b",
+  "title": "Open‑Source LLM Releases – Week of 2026‑09‑17 to 2026‑09‑23",
+  "executive_summary": "During the week ending 23 September 2026, the only confirmed open‑source large language model (LLM) release was Nokia’s AnyJev layer, announced on 17 September. No other new models were reported in the available evidence. The release adds a training‑free calibration layer that can be applied to existing open‑source LLMs.",
+  "findings": [
+    {
+      "title": "Nokia Announces AnyJev – A Training‑Free Calibration Layer",
+      "summary": "Nokia released AnyJev, a layer that can be added to any open‑source LLM to transform it into a calibrated decision‑making model without additional training. The announcement came on 17 September 2026 and highlights the layer’s ability to improve decision quality across a range of tasks.",
+      "date": "2026-09-17",
+      "why_it_matters": "It provides a practical tool for developers to enhance the reliability of open‑source LLMs without the cost of retraining, potentially accelerating adoption in enterprise settings.",
+      "sources": [
+        {
+          "url": "https://www.marktechpost.com/2026/09/23/nokia-open-sources-anyjev-a-training-free-layer-that-turns-any-open-llm-into-a-calibrated-decision-model/",
+          "verified": true
+        }
+      ]
+    }
+  ],
+  "confidence": "medium",
+  "confidence_reason": "The model gave no reason.",
+  "understanding": "Research the goal using a generic search-read-analyse plan: What happened in open-source LLM releases this week?",
+  "ambiguities": [],
+  "assumptions": [
+    "The planner LLM output was unusable, so a generic research plan is used."
+  ],
+  "limitations": [
+    "Only one confirmed release was found; other potential releases (e.g., Mistral 3.1) were not verified within the week. The search was limited by token budget, preventing a broader review of recent news."
+  ],
+  "execution": {
+    "steps": [
+      {
+        "id": 1,
+        "title": "Search recent news",
+        "status": "failed",
+        "attempts": 2,
+        "tools": [
+          "news_search",
+          "news_search",
+          "web_search",
+          "fetch_page (failed)",
+          "web_search",
+          "news_search",
+          "web_search",
+          "news_search"
+        ],
+        "review": "Result lists only one release and provides no URLs, failing the requirement for at least three dated results with links."
+      },
+      {
+        "id": 5,
+        "title": "Broad news search for open‑source LLM releases",
+        "status": "skipped",
+        "attempts": 0,
+        "tools": [],
+        "review": null
+      },
+      {
+        "id": 6,
+        "title": "Web search for additional open‑source LLM releases",
+        "status": "skipped",
+        "attempts": 0,
+        "tools": [],
+        "review": null
+      },
+      {
+        "id": 7,
+        "title": "Fetch and verify top three dated articles",
+        "status": "skipped",
+        "attempts": 0,
+        "tools": [],
+        "review": null
+      }
+    ],
+    "replans": [
+      {
+        "after_step": 1,
+        "reasoning": "The initial attempt failed because the news_search returned insufficient dated results with URLs. To remedy this, we broaden the query to include multiple known open‑source LLM projects (e.g., Mistral, Llama, OpenChat, etc.) and increase the number of results. We then use web_search to capture additional sources that may not appear in the news feed. Finally, we fetch the pages of the top three dated articles to confirm their content and URLs.",
+        "new_steps": [
+          "Broad news search for open‑source LLM releases",
+          "Web search for additional open‑source LLM releases",
+          "Fetch and verify top three dated articles"
+        ]
+      }
+    ],
+    "recoveries": [
+      {
+        "kind": "json_repair",
+        "step_id": null,
+        "target": "Plan",
+        "error": "reply contains no JSON object"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": null,
+        "target": "Plan",
+        "error": "reply contains no JSON object"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": null,
+        "wait_s": 7.5,
+        "error": "tokens per minute: limit 8000, used 7812, requested 1031"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": null,
+        "wait_s": 1.5,
+        "error": "tokens per minute: limit 8000, used 6755, requested 1246"
+      },
+      {
+        "kind": "fallback_plan",
+        "step_id": null,
+        "reason": "Plan still invalid after 2 repairs: plan must have 2-6 steps, got 1"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 5.5,
+        "error": "tokens per minute: limit 8000, used 7547, requested 1019"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 4.5,
+        "error": "tokens per minute: limit 8000, used 7621, requested 857"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 1.5,
+        "error": "tokens per minute: limit 8000, used 7007, requested 1074"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 3.5,
+        "error": "tokens per minute: limit 8000, used 6834, requested 1498"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 9.5,
+        "error": "tokens per minute: limit 8000, used 7599, requested 1555"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 18.7,
+        "window_tokens": 5257,
+        "request_estimate": 2719
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 7.5,
+        "error": "tokens per minute: limit 8000, used 6701, requested 2180"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 11.7,
+        "window_tokens": 4123,
+        "request_estimate": 3333
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 21.5,
+        "error": "tokens per minute: limit 8000, used 7921, requested 2872"
+      },
+      {
+        "kind": "forced_finish",
+        "step_id": 1,
+        "limit": 4
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 20.3,
+        "window_tokens": 4595,
+        "request_estimate": 3523
+      },
+      {
+        "kind": "step_retry",
+        "step_id": 1,
+        "reason": "Only one dated result with a URL was provided, and the page could not be fetched."
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 36.0,
+        "window_tokens": 6248,
+        "request_estimate": 1806
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 16.4,
+        "window_tokens": 6140,
+        "request_estimate": 2976
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 5.5,
+        "error": "tokens per minute: limit 8000, used 6148, requested 2435"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 34.2,
+        "window_tokens": 4743,
+        "request_estimate": 3581
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 1,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 6.5,
+        "error": "tokens per minute: limit 8000, used 5590, requested 3121"
+      },
+      {
+        "kind": "forced_finish",
+        "step_id": 1,
+        "limit": 4
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 15.3,
+        "window_tokens": 5048,
+        "request_estimate": 3772
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 4.5,
+        "error": "tokens per minute: limit 8000, used 5283, requested 3140"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 1,
+        "wait_s": 4.5,
+        "error": "tokens per minute: limit 8000, used 7657, requested 829"
+      },
+      {
+        "kind": "replan",
+        "step_id": 1,
+        "failed_step": 1,
+        "reason": "Result lists only one release and provides no URLs, failing the requirement for at least three dated results with links."
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 1,
+        "wait_s": 33.3,
+        "window_tokens": 6692,
+        "request_estimate": 2229
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 5,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 5,
+        "wait_s": 18.6,
+        "window_tokens": 6254,
+        "request_estimate": 2422
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 5,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "duplicate_call",
+        "step_id": 5,
+        "tool": "news_search"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 5,
+        "wait_s": 3.0,
+        "window_tokens": 4767,
+        "request_estimate": 2482
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 5,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 8.5,
+        "error": "tokens per minute: limit 8000, used 6992, requested 2047"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 5,
+        "wait_s": 21.6,
+        "window_tokens": 5759,
+        "request_estimate": 3140
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 5,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 6.5,
+        "error": "tokens per minute: limit 8000, used 6020, requested 2700"
+      },
+      {
+        "kind": "step_retry",
+        "step_id": 5,
+        "reason": "No URLs or at least three recent results were provided."
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 5,
+        "wait_s": 11.7,
+        "window_tokens": 6366,
+        "request_estimate": 2106
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 5,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 8.5,
+        "error": "tokens per minute: limit 8000, used 7615, requested 1334"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 5,
+        "wait_s": 3.9,
+        "window_tokens": 5937,
+        "request_estimate": 2537
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 7.5,
+        "error": "tokens per minute: limit 8000, used 6949, requested 1875"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 5,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 13.5,
+        "error": "tokens per minute: limit 8000, used 7619, requested 2072"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 5,
+        "wait_s": 7.8,
+        "window_tokens": 5961,
+        "request_estimate": 3256
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 2.5,
+        "error": "tokens per minute: limit 8000, used 5558, requested 2648"
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 5,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 19.5,
+        "error": "tokens per minute: limit 8000, used 7810, requested 2668"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 5,
+        "wait_s": 24.7,
+        "window_tokens": 4255,
+        "request_estimate": 3420
+      },
+      {
+        "kind": "json_repair",
+        "step_id": 5,
+        "target": "AgentAction",
+        "error": "action: Field required"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 11.5,
+        "error": "tokens per minute: limit 8000, used 6650, requested 2790"
+      },
+      {
+        "kind": "llm_rate_limit",
+        "step_id": 5,
+        "wait_s": 1.5,
+        "error": "tokens per minute: limit 8000, used 5101, requested 2967"
+      },
+      {
+        "kind": "forced_finish",
+        "step_id": 5,
+        "limit": 4
+      },
+      {
+        "kind": "budget",
+        "step_id": 5,
+        "detail": "token budget of 40,000 exhausted"
+      },
+      {
+        "kind": "llm_throttle",
+        "step_id": 5,
+        "wait_s": 13.3,
+        "window_tokens": 5156,
+        "request_estimate": 2564
+      }
+    ],
+    "injected_faults": [
+      "llm:bad_json:2"
+    ]
+  },
+  "grounding": {
+    "cited_sources": 1,
+    "verified_sources": 1,
+    "rate": 1.0,
+    "note": "verified = the URL was actually returned by a tool during this run",
+    "window_days": 7,
+    "findings_outside_window": 0
+  },
+  "stats": {
+    "duration_s": 509.0,
+    "steps_passed": 0,
+    "steps_total": 4,
+    "tool_calls": 8,
+    "tool_failures": 1,
+    "recoveries": 65,
+    "llm_calls": 26,
+    "tokens": 42751
+  }
+}

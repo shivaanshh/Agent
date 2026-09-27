@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyAgent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:    #faf8f4;
+  --cream2:   #f4f1eb;
+  --cream3:   #ede8df;
+  --rose:     #f2c4ce;
+  --rose2:    #e8a0b0;
+  --rose-t:   rgba(242,196,206,0.25);
+  --sage:     #b8d4c8;
+  --sage2:    #8fbfae;
+  --sage-t:   rgba(184,212,200,0.25);
+  --sky:      #bdd5ea;
+  --sky2:     #8cb8d8;
+  --sky-t:    rgba(189,213,234,0.25);
+  --lavender: #c9c0e0;
+  --lav2:     #a898cc;
+  --lav-t:    rgba(201,192,224,0.25);
+  --peach:    #f5c9a8;
+  --peach2:   #e8a878;
+  --peach-t:  rgba(245,201,168,0.25);
+  --butter:   #f0e0a8;
+  --butter-t: rgba(240,224,168,0.25);
+  --ink:      #3d3530;
+  --ink2:     #5c5048;
+  --ink3:     #8a7d74;
+  --ink4:     #b8aca4;
+  --line:     rgba(61,53,48,0.10);
+  --line2:    rgba(61,53,48,0.16);
+  --r:        10px;
+  --r2:       16px;
+  --shadow:   0 2px 12px rgba(61,53,48,0.08);
+  --shadow2:  0 4px 24px rgba(61,53,48,0.12);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);display:flex;flex-direction:column}
+
+/* ── TOPBAR ──────────────────────────────────────────────── */
+.topbar{
+  height:52px;flex-shrink:0;
+  background:var(--cream);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;padding:0 20px;gap:12px;
+  box-shadow:var(--shadow);z-index:10;
+}
+.brand{font-family:'Lora',serif;font-size:18px;font-weight:500;color:var(--ink);display:flex;align-items:center;gap:8px}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--sage2);animation:breathe 2.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(0.7);opacity:.5}}
+.model-pill{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);background:var(--cream2);border:1px solid var(--line2);border-radius:20px;padding:2px 9px}
+.status-pill{font-family:'DM Mono',monospace;font-size:10px;padding:2px 9px;border-radius:20px;display:flex;align-items:center;gap:5px;transition:all .2s}
+.status-pill.ready{color:var(--sage2);background:var(--sage-t);border:1px solid rgba(143,191,174,.4)}
+.status-pill.busy{color:var(--peach2);background:var(--peach-t);border:1px solid rgba(232,168,120,.4)}
+.sdot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+
+/* ── SHELL ───────────────────────────────────────────────── */
+.shell{display:flex;flex:1;overflow:hidden}
+
+/* ── LEFT SIDEBAR ────────────────────────────────────────── */
+.sidebar{width:200px;flex-shrink:0;background:var(--cream2);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+.sb-section{font-size:9px;font-family:'DM Mono',monospace;color:var(--ink4);letter-spacing:.12em;text-transform:uppercase;padding:14px 14px 5px}
+.sb-btn{
+  display:flex;align-items:center;gap:9px;padding:7px 14px;
+  font-size:12.5px;color:var(--ink2);cursor:pointer;
+  border:none;background:transparent;width:100%;text-align:left;
+  transition:background .15s,color .15s;border-left:2px solid transparent;
+  font-family:'DM Sans',sans-serif;
+}
+.sb-btn:hover{background:var(--cream3);color:var(--ink)}
+.sb-btn.active{background:var(--rose-t);color:var(--rose2);border-left-color:var(--rose2)}
+.sb-btn.firing{background:var(--sage-t);color:var(--sage2);border-left-color:var(--sage2)}
+.sb-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;font-size:10px;background:var(--rose);color:var(--ink2);border-radius:10px;padding:1px 6px;font-family:'DM Mono',monospace}
+
+.mem-area{margin-top:auto;border-top:1px solid var(--line);padding:8px 0 10px}
+.mem-list{padding:4px 12px 0;display:flex;flex-direction:column;gap:4px;max-height:110px;overflow-y:auto}
+.mem-chip{font-size:10.5px;color:var(--lav2);background:var(--lav-t);border:1px solid rgba(168,152,204,.3);border-radius:5px;padding:3px 7px;font-family:'DM Mono',monospace;line-height:1.4;word-break:break-word;cursor:pointer}
+.mem-chip:hover{background:var(--lavender);color:var(--ink2)}
+.mem-empty{font-size:11px;color:var(--ink4);font-style:italic;padding:0 14px}
+
+/* ── MAIN ────────────────────────────────────────────────── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--cream)}
+
+/* ── QUICK ACTION BAR ────────────────────────────────────── */
+.qbar{
+  flex-shrink:0;
+  background:var(--cream2);
+  border-bottom:1px solid var(--line);
+  padding:8px 16px;
+  display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+}
+.qbtn{
+  display:flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:20px;
+  border:1px solid var(--line2);background:var(--cream);
+  font-size:12px;color:var(--ink2);cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  transition:all .15s;white-space:nowrap;
+}
+.qbtn:hover{border-color:var(--rose2);background:var(--rose-t);color:var(--rose2)}
+.qbtn .qi{font-size:13px}
+
+/* ── CHAT ────────────────────────────────────────────────── */
+.chat-wrap{flex:1;overflow-y:auto;padding:20px 0 10px}
+.chat-wrap::-webkit-scrollbar{width:4px}
+.chat-wrap::-webkit-scrollbar-thumb{background:var(--cream3);border-radius:2px}
+.chat-inner{max-width:800px;margin:0 auto;padding:0 24px;display:flex;flex-direction:column;gap:18px}
+
+.msg-row{display:flex;gap:10px;animation:rise .3s cubic-bezier(.22,1,.36,1)}
+.msg-row.user{flex-direction:row-reverse}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.av{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:2px;font-family:'DM Mono',monospace}
+.av.agent{background:var(--sage);color:var(--ink2);border:1px solid var(--sage2)}
+.av.user{background:var(--rose);color:var(--ink2);border:1px solid var(--rose2)}
+
+.bubble{max-width:75%;padding:11px 15px;font-size:13.5px;line-height:1.75;border-radius:4px 14px 14px 14px}
+.bubble.agent{background:white;border:1px solid var(--line2);color:var(--ink);box-shadow:var(--shadow)}
+.bubble.user{background:var(--rose-t);border:1px solid rgba(242,196,206,.5);color:var(--ink);border-radius:14px 4px 14px 14px}
+
+.think-row{display:flex;gap:10px}
+.think-bub{display:flex;gap:5px;align-items:center;padding:10px 14px;background:white;border:1px solid var(--line2);border-radius:4px 14px 14px 14px;box-shadow:var(--shadow)}
+.td{width:6px;height:6px;border-radius:50%;background:var(--sage2);animation:blink 1.3s infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+.steps-group{padding-left:40px;display:flex;flex-direction:column;gap:5px;margin-top:-12px}
+.step-block{border-radius:0 7px 7px 0;padding:6px 11px;font-size:11px;font-family:'DM Mono',monospace;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-width:87%;animation:rise .2s ease}
+.step-block.think{background:var(--sky-t);border-left:2px solid var(--sky2);color:var(--sky2)}
+.step-block.tool_call{background:var(--sage-t);border-left:2px solid var(--sage2);color:var(--sage2)}
+.step-block.tool_result{background:var(--peach-t);border-left:2px solid var(--peach2);color:var(--peach2)}
+.step-label{font-size:9px;opacity:.7;text-transform:uppercase;letter-spacing:.09em;margin-bottom:2px}
+
+/* suggestions */
+.sugs-wrap{padding:0 24px 12px;max-width:800px;margin:0 auto;width:100%}
+.sugs{display:flex;flex-wrap:wrap;gap:5px}
+.sug{font-size:11.5px;padding:5px 12px;border-radius:20px;border:1px solid var(--line2);background:white;color:var(--ink3);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;box-shadow:var(--shadow)}
+.sug:hover{border-color:var(--sage2);color:var(--sage2);background:var(--sage-t)}
+
+/* ── INPUT BAR ───────────────────────────────────────────── */
+.inp-bar{border-top:1px solid var(--line);padding:12px 20px;flex-shrink:0;background:var(--cream2)}
+.inp-inner{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.inp-row{display:flex;gap:8px;align-items:flex-end}
+textarea{
+  flex:1;min-height:40px;max-height:110px;
+  background:white;border:1px solid var(--line2);border-radius:var(--r2);
+  padding:10px 13px;font-size:13.5px;font-family:'DM Sans',sans-serif;
+  color:var(--ink);resize:none;outline:none;line-height:1.55;
+  transition:border-color .2s;box-shadow:var(--shadow);
+}
+textarea:focus{border-color:var(--sage2)}
+textarea::placeholder{color:var(--ink4)}
+
+.send-btn{
+  width:40px;height:40px;flex-shrink:0;
+  background:var(--sage);border:1px solid var(--sage2);border-radius:var(--r2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;color:var(--ink2);
+}
+.send-btn:hover{background:var(--sage2);color:white;transform:scale(1.04)}
+.send-btn:active{transform:scale(.97)}
+.send-btn:disabled{background:var(--cream3);color:var(--ink4);cursor:not-allowed;transform:none;border-color:var(--line)}
+
+/* attach row */
+.attach-row{display:flex;align-items:center;gap:8px}
+.attach-btn{
+  display:flex;align-items:center;gap:5px;padding:4px 11px;
+  border:1px dashed var(--line2);border-radius:20px;background:transparent;
+  font-size:11.5px;color:var(--ink3);cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:all .15s;
+}
+.attach-btn:hover{border-color:var(--sky2);color:var(--sky2);background:var(--sky-t)}
+.attached-file{display:flex;align-items:center;gap:6px;background:var(--sky-t);border:1px solid var(--sky2);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--sky2);font-family:'DM Mono',monospace}
+.attached-file button{background:none;border:none;color:var(--sky2);cursor:pointer;font-size:13px;line-height:1;padding:0 0 0 4px}
+#fileInput{display:none}
+
+/* calc bar */
+.calc-bar{display:flex;align-items:center;gap:6px;padding:4px 0;flex-wrap:wrap}
+.calc-label{font-size:11px;color:var(--ink3);font-family:'DM Mono',monospace}
+.calc-btns{display:flex;flex-wrap:wrap;gap:4px}
+.calc-chip{
+  padding:3px 9px;border-radius:6px;border:1px solid var(--line2);
+  background:var(--cream);font-size:11.5px;font-family:'DM Mono',monospace;
+  color:var(--ink2);cursor:pointer;transition:all .12s;
+}
+.calc-chip:hover{background:var(--butter-t);border-color:var(--butter);color:var(--ink)}
+.calc-input-wrap{display:flex;gap:5px;align-items:center;flex:1;min-width:180px}
+#calcInput{flex:1;font-family:'DM Mono',monospace;font-size:12.5px;padding:4px 9px;border:1px solid var(--line2);border-radius:7px;background:white;color:var(--ink);outline:none}
+#calcInput:focus{border-color:var(--peach2)}
+.calc-go{padding:4px 12px;border-radius:7px;background:var(--butter-t);border:1px solid var(--peach2);font-size:11.5px;color:var(--ink2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.calc-go:hover{background:var(--peach-t);color:var(--ink)}
+
+/* ── RIGHT PANEL ─────────────────────────────────────────── */
+.rpanel{width:240px;flex-shrink:0;background:var(--cream2);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+.rp-tabs{display:flex;border-bottom:1px solid var(--line);flex-shrink:0}
+.rp-tab{flex:1;padding:9px 4px;font-size:11px;text-align:center;cursor:pointer;color:var(--ink3);border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .15s;border-bottom:2px solid transparent;font-weight:500}
+.rp-tab.on{color:var(--rose2);border-bottom-color:var(--rose2);background:var(--rose-t)}
+.rp-tab:hover:not(.on){background:var(--cream3)}
+.rp-body{flex:1;overflow-y:auto;padding:8px 0}
+.rp-body::-webkit-scrollbar{width:3px}
+.rp-body::-webkit-scrollbar-thumb{background:var(--cream3)}
+
+/* task items */
+.task-item{
+  display:flex;align-items:flex-start;gap:8px;padding:7px 12px;
+  border-bottom:1px solid var(--line);transition:background .12s;
+}
+.task-item:hover{background:var(--cream3)}
+.task-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--line2);background:white;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all .15s}
+.task-check:hover{border-color:var(--sage2);background:var(--sage-t)}
+.task-check.done{background:var(--sage);border-color:var(--sage2)}
+.task-text{flex:1;font-size:12px;color:var(--ink2);line-height:1.4;min-width:0}
+.task-text.done{text-decoration:line-through;color:var(--ink4)}
+.task-meta{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
+.priority-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.task-del{background:none;border:none;color:var(--ink4);cursor:pointer;font-size:14px;padding:0;opacity:0;transition:opacity .15s;flex-shrink:0}
+.task-item:hover .task-del{opacity:1}
+.task-tag{font-size:9.5px;font-family:'DM Mono',monospace;padding:1px 5px;border-radius:3px;color:var(--lav2);background:var(--lav-t)}
+.task-due{font-size:9.5px;font-family:'DM Mono',monospace;color:var(--peach2)}
+
+.add-task-form{padding:10px 12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.add-task-form input,.add-task-form select{padding:5px 8px;border:1px solid var(--line2);border-radius:6px;font-size:11.5px;font-family:'DM Sans',sans-serif;background:white;color:var(--ink);outline:none;width:100%}
+.add-task-form input:focus,.add-task-form select:focus{border-color:var(--sage2)}
+.add-task-row{display:flex;gap:5px}
+.add-task-btn{padding:5px 10px;border-radius:6px;background:var(--sage-t);border:1px solid var(--sage2);font-size:11.5px;color:var(--sage2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;white-space:nowrap}
+.add-task-btn:hover{background:var(--sage);color:var(--ink2)}
+
+/* note items */
+.note-item{padding:8px 12px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s}
+.note-item:hover{background:var(--cream3)}
+.note-title{font-size:12.5px;font-weight:500;color:var(--ink2);margin-bottom:2px}
+.note-preview{font-size:11px;color:var(--ink3);line-height:1.4;margin-bottom:4px}
+.note-tags{display:flex;gap:3px;flex-wrap:wrap}
+.note-tag{font-size:9.5px;font-family:'DM Mono',monospace;padding:1px 5px;border-radius:3px;color:var(--lav2);background:var(--lav-t)}
+.note-del{float:right;background:none;border:none;color:var(--ink4);cursor:pointer;font-size:13px;opacity:0;transition:opacity .15s}
+.note-item:hover .note-del{opacity:1}
+
+/* file items */
+.file-item{display:flex;align-items:center;gap:7px;padding:7px 12px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s}
+.file-item:hover{background:var(--cream3)}
+.file-item.selected{background:var(--sky-t)}
+.file-icon{font-size:14px;flex-shrink:0}
+.file-name{flex:1;font-size:11.5px;font-family:'DM Mono',monospace;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-meta{font-size:9.5px;color:var(--ink4);text-align:right;flex-shrink:0}
+.file-del{background:none;border:none;color:var(--ink4);cursor:pointer;font-size:13px;opacity:0;transition:opacity .15s;flex-shrink:0}
+.file-item:hover .file-del{opacity:1}
+.file-preview-box{border-top:1px solid var(--line);padding:10px 12px;font-family:'DM Mono',monospace;font-size:10.5px;color:var(--ink3);white-space:pre-wrap;word-break:break-word;max-height:180px;overflow-y:auto;line-height:1.55;background:white}
+
+/* empty state */
+.empty-state{padding:24px 12px;text-align:center;font-size:12px;color:var(--ink4);font-style:italic}
+
+/* note modal */
+.overlay{display:none;position:fixed;inset:0;background:rgba(61,53,48,.3);z-index:100;align-items:center;justify-content:center}
+.overlay.show{display:flex}
+.modal{background:white;border-radius:var(--r2);padding:20px;width:380px;max-width:90vw;box-shadow:var(--shadow2)}
+.modal h3{font-family:'Lora',serif;font-size:16px;margin-bottom:14px;color:var(--ink)}
+.modal input,.modal textarea{width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;margin-bottom:8px}
+.modal textarea{min-height:80px;resize:vertical}
+.modal input:focus,.modal textarea:focus{border-color:var(--sage2)}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.modal-btns button{padding:7px 16px;border-radius:var(--r);font-size:12.5px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-cancel{background:var(--cream2);border:1px solid var(--line2);color:var(--ink2)}
+.btn-save{background:var(--sage);border:1px solid var(--sage2);color:var(--ink2)}
+.btn-save:hover{background:var(--sage2);color:white}
+
+/* section divider */
+.rp-divider{padding:6px 12px 2px;font-size:9px;font-family:'DM Mono',monospace;color:var(--ink4);letter-spacing:.1em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<!-- NOTE MODAL -->
+<div class="overlay" id="noteModal">
+  <div class="modal">
+    <h3>Add note</h3>
+    <input type="text" id="noteTitle" placeholder="Title…">
+    <textarea id="noteContent" placeholder="Note content…"></textarea>
+    <input type="text" id="noteTags" placeholder="Tags (comma-separated)…">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeNoteModal()">Cancel</button>
+      <button class="btn-save" onclick="submitNote()">Save note</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand"><div class="brand-dot"></div>MyAgent</div>
+  <div class="model-pill">gpt-4o</div>
+  <div class="status-pill ready" id="statusPill"><div class="sdot"></div><span id="statusText">ready</span></div>
+  <div class="topbar-right">
+    <div class="model-pill" id="clockEl" style="color:var(--ink2)"></div>
+  </div>
+</div>
+
+<div class="shell">
+
+<!-- LEFT SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-section">Quick actions</div>
+  <button class="sb-btn" onclick="fillMsg('Search the web for latest AI news today')"><span class="sb-icon">🔍</span>Web search</button>
+  <button class="sb-btn" onclick="toggleCalc()"><span class="sb-icon">🧮</span>Calculator</button>
+  <button class="sb-btn" onclick="fillMsg('Read my latest 5 emails from inbox')"><span class="sb-icon">📧</span>Read inbox</button>
+  <button class="sb-btn" onclick="fillMsg('List all my pending tasks')"><span class="sb-icon">✅</span>View tasks</button>
+  <button class="sb-btn" onclick="switchTab('notes');openNoteModal()"><span class="sb-icon">📝</span>New note</button>
+  <button class="sb-btn" onclick="triggerUpload()"><span class="sb-icon">📎</span>Upload file</button>
+  <button class="sb-btn" onclick="fillMsg('Generate a secure 20-character password with symbols')"><span class="sb-icon">🔐</span>Password</button>
+  <button class="sb-btn" onclick="fillMsg('Translate \"Hello, how are you?\" to Hindi')"><span class="sb-icon">🌐</span>Translate</button>
+  <button class="sb-btn" onclick="fillMsg('What is the current date and time?')"><span class="sb-icon">🕐</span>Date & time</button>
+  <button class="sb-btn" onclick="fillMsg('Show me all files in workspace and uploads')"><span class="sb-icon">📂</span>List files</button>
+
+  <div class="sb-section">Tools</div>
+  <button class="sb-btn" id="ti-web_search"     ><span class="sb-icon">·</span>web_search</button>
+  <button class="sb-btn" id="ti-calculator"     ><span class="sb-icon">·</span>calculator</button>
+  <button class="sb-btn" id="ti-send_email"     ><span class="sb-icon">·</span>send_email</button>
+  <button class="sb-btn" id="ti-read_inbox"     ><span class="sb-icon">·</span>read_inbox</button>
+  <button class="sb-btn" id="ti-write_file"     ><span class="sb-icon">·</span>write_file</button>
+  <button class="sb-btn" id="ti-add_task"       ><span class="sb-icon">·</span>add_task</button>
+  <button class="sb-btn" id="ti-remember_fact"  ><span class="sb-icon">·</span>remember_fact</button>
+  <button class="sb-btn" id="ti-translate_text" ><span class="sb-icon">·</span>translate_text</button>
+  <button class="sb-btn" id="ti-run_code"       ><span class="sb-icon">·</span>run_code</button>
+
+  <div class="mem-area">
+    <div class="sb-section" style="padding-top:0">Memory</div>
+    <div class="mem-list" id="memList"><div class="mem-empty">nothing yet</div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- QUICK ACTION BAR -->
+  <div class="qbar">
+    <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--ink4)">Quick:</span>
+    <button class="qbtn" onclick="fillMsg('What is 15% of 85000?')"><span class="qi">🧮</span>15% of 85k</button>
+    <button class="qbtn" onclick="fillMsg('Convert 100 USD to INR')"><span class="qi">💱</span>Currency</button>
+    <button class="qbtn" onclick="fillMsg('Summarize the text I will paste below in brief')"><span class="qi">📋</span>Summarize</button>
+    <button class="qbtn" onclick="fillMsg('How many days until 31 December 2026?')"><span class="qi">📅</span>Days until</button>
+    <button class="qbtn" onclick="fillMsg('Run this Python code: print([x**2 for x in range(1,11)])')"><span class="qi">⚙️</span>Run code</button>
+    <button class="qbtn" onclick="fillMsg('Count the words in: The quick brown fox jumps over the lazy dog')"><span class="qi">🔢</span>Word count</button>
+    <button class="qbtn" onclick="fillMsg('Convert 5 km to miles')"><span class="qi">📏</span>Convert units</button>
+    <button class="qbtn" onclick="fillMsg('What are my pending high priority tasks?')"><span class="qi">🔴</span>High priority</button>
+  </div>
+
+  <div class="chat-wrap" id="chatWrap">
+    <div class="chat-inner" id="chatInner"></div>
+  </div>
+
+  <div class="sugs-wrap" id="sugsWrap">
+    <div class="sugs">
+      <button class="sug" onclick="qs(this)">Search AI agent frameworks in 2026</button>
+      <button class="sug" onclick="qs(this)">Compound interest: ₹1,00,000 at 8.5% for 20 years</button>
+      <button class="sug" onclick="qs(this)">Remember: I have an AI engineer interview tomorrow</button>
+      <button class="sug" onclick="qs(this)">Add high priority task: Prepare OpenClaw demo for interview</button>
+      <button class="sug" onclick="qs(this)">Write a file: react_loop.md explaining the ReAct pattern in detail</button>
+      <button class="sug" onclick="qs(this)">Translate "Good morning, I am ready for the interview" to Hindi and Japanese</button>
+      <button class="sug" onclick="qs(this)">Draft email to recruiter@company.com about my interview tomorrow</button>
+    </div>
+  </div>
+
+  <div class="inp-bar">
+    <div class="inp-inner">
+      <!-- Calculator bar (hidden by default) -->
+      <div class="calc-bar" id="calcBar" style="display:none">
+        <span class="calc-label">calc:</span>
+        <div class="calc-btns">
+          <button class="calc-chip" onclick="calcInsert('math.sqrt()')">√x</button>
+          <button class="calc-chip" onclick="calcInsert('**2')">x²</button>
+          <button class="calc-chip" onclick="calcInsert('**3')">x³</button>
+          <button class="calc-chip" onclick="calcInsert('**')">xⁿ</button>
+          <button class="calc-chip" onclick="calcInsert('math.log()')">log</button>
+          <button class="calc-chip" onclick="calcInsert('math.log10()')">log₁₀</button>
+          <button class="calc-chip" onclick="calcInsert('math.pi')">π</button>
+          <button class="calc-chip" onclick="calcInsert('math.e')">e</button>
+          <button class="calc-chip" onclick="calcInsert('math.sin(math.radians())')">sin</button>
+          <button class="calc-chip" onclick="calcInsert('math.cos(math.radians())')">cos</button>
+          <button class="calc-chip" onclick="calcInsert('%')">%</button>
+          <button class="calc-chip" onclick="calcInsert('1/')">1/x</button>
+        </div>
+        <div class="calc-input-wrap">
+          <input id="calcInput" placeholder="expression e.g. 100000*(1.085**20)" onkeydown="if(event.key==='Enter')calcSend()">
+          <button class="calc-go" onclick="calcSend()">Calculate ↵</button>
+        </div>
+      </div>
+
+      <!-- File attach row -->
+      <div class="attach-row">
+        <button class="attach-btn" onclick="triggerUpload()"><span style="font-size:13px">📎</span> Attach file</button>
+        <div id="attachedFile" style="display:none"></div>
+        <input type="file" id="fileInput" accept=".txt,.md,.csv,.json,.py,.js,.html,.pdf,.docx" onchange="handleFileSelect(this)">
+      </div>
+
+      <div class="inp-row">
+        <textarea id="msgInput" placeholder="Ask me anything — search, calculate, manage tasks, send emails, write files…" rows="1"
+          onkeydown="handleKey(event)" oninput="autoGrow(this)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send (Enter)">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- RIGHT PANEL -->
+<aside class="rpanel">
+  <div class="rp-tabs">
+    <button class="rp-tab on" id="tab-tasks"  onclick="switchTab('tasks')">Tasks</button>
+    <button class="rp-tab"    id="tab-notes"  onclick="switchTab('notes')">Notes</button>
+    <button class="rp-tab"    id="tab-files"  onclick="switchTab('files')">Files</button>
+  </div>
+
+  <!-- TASKS -->
+  <div class="rp-body" id="body-tasks">
+    <div id="taskList"><div class="empty-state">No tasks yet.<br>Ask the agent to add one!</div></div>
+    <div class="add-task-form">
+      <input type="text" id="quickTaskInput" placeholder="Quick add task…" onkeydown="if(event.key==='Enter')quickAddTask()">
+      <div class="add-task-row">
+        <select id="quickPriority" style="flex:1">
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="low">Low</option>
+        </select>
+        <input type="date" id="quickDue" style="flex:1">
+        <button class="add-task-btn" onclick="quickAddTask()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="rp-body" id="body-notes" style="display:none">
+    <div style="padding:8px 12px 4px;display:flex;justify-content:flex-end">
+      <button class="add-task-btn" onclick="openNoteModal()">+ New note</button>
+    </div>
+    <div id="noteList"><div class="empty-state">No notes yet.</div></div>
+  </div>
+
+  <!-- FILES -->
+  <div class="rp-body" id="body-files" style="display:none">
+    <div style="padding:8px 12px 4px;display:flex;justify-content:flex-end">
+      <button class="add-task-btn" onclick="triggerUpload()">↑ Upload</button>
+    </div>
+    <div id="fileList"><div class="empty-state">No files yet.</div></div>
+    <div class="file-preview-box" id="filePreviewBox" style="display:none">
+      <div style="font-size:9px;color:var(--ink4);font-family:'DM Mono',monospace;margin-bottom:6px" id="filePreviewName"></div>
+      <div id="filePreviewContent"></div>
+    </div>
+  </div>
+</aside>
+
+</div><!-- shell -->
+
+<script>
+let history=[], busy=false, attachedFile=null;
+
+// ── CLOCK ────────────────────────────────────────────────────
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clockEl').textContent=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+setInterval(updateClock,1000); updateClock();
+
+// ── UTILS ────────────────────────────────────────────────────
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
+function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px'}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
+function scrollBot(){const w=document.getElementById('chatWrap');setTimeout(()=>w.scrollTop=w.scrollHeight,60)}
+function fillMsg(t){document.getElementById('msgInput').value=t;document.getElementById('msgInput').focus()}
+function qs(btn){fillMsg(btn.textContent);sendMessage()}
+
+function setStatus(s){
+  const p=document.getElementById('statusPill');
+  const t=document.getElementById('statusText');
+  if(s==='busy'){p.className='status-pill busy';t.textContent='thinking…';}
+  else{p.className='status-pill ready';t.textContent='ready';}
+}
+
+function fireTool(name){
+  const el=document.getElementById('ti-'+name);
+  if(!el)return;
+  el.classList.add('firing');
+  setTimeout(()=>el.classList.remove('firing'),1100);
+}
+
+// ── TABS ─────────────────────────────────────────────────────
+function switchTab(tab){
+  ['tasks','notes','files'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('on',t===tab);
+    document.getElementById('body-'+t).style.display=t===tab?'flex':'none';
+    document.getElementById('body-'+t).style.flexDirection='column';
+  });
+  if(tab==='files') loadFiles();
+}
+
+// ── CALC PANEL ────────────────────────────────────────────────
+function toggleCalc(){
+  const b=document.getElementById('calcBar');
+  b.style.display=b.style.display==='none'?'flex':'none';
+  if(b.style.display!=='none') document.getElementById('calcInput').focus();
+}
+function calcInsert(s){
+  const el=document.getElementById('calcInput');
+  el.value+=s; el.focus();
+}
+function calcSend(){
+  const expr=document.getElementById('calcInput').value.trim();
+  if(!expr) return;
+  fillMsg('Calculate: '+expr);
+  document.getElementById('calcInput').value='';
+  document.getElementById('calcBar').style.display='none';
+  sendMessage();
+}
+
+// ── FILE UPLOAD ───────────────────────────────────────────────
+function triggerUpload(){document.getElementById('fileInput').click()}
+function handleFileSelect(input){
+  if(!input.files[0]) return;
+  const f=input.files[0];
+  const fd=new FormData();
+  fd.append('file',f);
+  fetch('/upload',{method:'POST',body:fd}).then(r=>r.json()).then(d=>{
+    if(d.error){alert('Upload failed: '+d.error);return;}
+    attachedFile=d.filename;
+    const box=document.getElementById('attachedFile');
+    box.style.display='flex';
+    box.innerHTML=`<div class="attached-file">📄 ${esc(d.filename)}<button onclick="clearAttach()">×</button></div>`;
+    loadFiles();
+    addMsg('agent',`📎 File uploaded: <strong>${esc(d.filename)}</strong> (${(d.size/1024).toFixed(1)}KB)<br>You can now ask me to read or summarize it!`);
+  }).catch(e=>alert('Upload error: '+e));
+  input.value='';
+}
+function clearAttach(){
+  attachedFile=null;
+  document.getElementById('attachedFile').style.display='none';
+  document.getElementById('attachedFile').innerHTML='';
+}
+
+// ── MESSAGES ─────────────────────────────────────────────────
+function addMsg(role, html){
+  const inner=document.getElementById('chatInner');
+  const row=document.createElement('div'); row.className='msg-row '+role;
+  const av=document.createElement('div'); av.className='av '+role; av.textContent=role==='agent'?'M':'U';
+  const bub=document.createElement('div'); bub.className='bubble '+role; bub.innerHTML=html;
+  row.appendChild(av); row.appendChild(bub);
+  inner.appendChild(row); scrollBot();
+}
+function showThinking(){
+  const inner=document.getElementById('chatInner');
+  const row=document.createElement('div'); row.className='think-row'; row.id='thinkRow';
+  const av=document.createElement('div'); av.className='av agent'; av.textContent='M';
+  const b=document.createElement('div'); b.className='think-bub';
+  b.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';
+  row.appendChild(av); row.appendChild(b); inner.appendChild(row); scrollBot();
+}
+function hideThinking(){const e=document.getElementById('thinkRow');if(e)e.remove()}
+function addSteps(steps){
+  if(!steps.length)return;
+  const inner=document.getElementById('chatInner');
+  const g=document.createElement('div'); g.className='steps-group';
+  steps.forEach(s=>{
+    const d=document.createElement('div'); d.className='step-block '+s.type;
+    let lbl='',ico='';
+    if(s.type==='think'){lbl='reasoning';ico='◌ ';}
+    else if(s.type==='tool_call'){lbl='→ '+s.tool;ico='⊕ ';fireTool(s.tool);}
+    else if(s.type==='tool_result'){lbl='← result';ico='◎ ';}
+    const content=s.type==='tool_call'?JSON.stringify(s.input,null,1):(s.content||'').substring(0,500)+((s.content||'').length>500?'…':'');
+    d.innerHTML=`<div class="step-label">${ico}${lbl}</div>${esc(content)}`;
+    g.appendChild(d);
+  });
+  inner.appendChild(g); scrollBot();
+}
+
+// ── PANELS ───────────────────────────────────────────────────
+function updateMemory(facts){
+  const el=document.getElementById('memList');
+  if(!facts||!facts.length){el.innerHTML='<div class="mem-empty">nothing yet</div>';return;}
+  el.innerHTML=facts.map((f,i)=>`<div class="mem-chip" title="Click to recall" onclick="fillMsg('Recall memory #${i+1}')">${esc(f.fact.substring(0,60)+(f.fact.length>60?'…':''))}</div>`).join('');
+}
+
+function renderTasks(tasks){
+  const el=document.getElementById('taskList');
+  const pending=tasks.filter(t=>!t.done);
+  if(!pending.length){el.innerHTML='<div class="empty-state">No pending tasks!<br>Add one below or ask the agent.</div>';return;}
+  const priorityColors={'high':'#e8a0b0','medium':'#f5c9a8','low':'#b8d4c8'};
+  el.innerHTML=pending.map((t,i)=>`
+    <div class="task-item">
+      <div class="priority-dot" style="background:${priorityColors[t.priority||'medium']}"></div>
+      <div class="task-check" onclick="completeTaskDirect(${i})" title="Mark done"></div>
+      <div style="flex:1;min-width:0">
+        <div class="task-text">${esc(t.task)}</div>
+        <div class="task-meta">
+          ${t.due?`<span class="task-due">📅 ${esc(t.due)}</span>`:''}
+          ${t.category&&t.category!=='general'?`<span class="task-tag">#${esc(t.category)}</span>`:''}
+        </div>
+      </div>
+      <button class="task-del" onclick="deleteTaskDirect(${i})" title="Delete">×</button>
+    </div>`).join('');
+}
+
+function renderNotes(notes){
+  const el=document.getElementById('noteList');
+  if(!notes||!notes.length){el.innerHTML='<div class="empty-state">No notes yet.</div>';return;}
+  el.innerHTML=notes.map((n,i)=>`
+    <div class="note-item">
+      <button class="note-del" onclick="deleteNoteDirect(${i})">×</button>
+      <div class="note-title">${esc(n.title)}</div>
+      <div class="note-preview">${esc(n.content.substring(0,100)+(n.content.length>100?'…':''))}</div>
+      <div class="note-tags">${(n.tags||[]).map(t=>`<span class="note-tag">${esc(t)}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function loadFiles(){
+  fetch('/files').then(r=>r.json()).then(files=>{
+    const el=document.getElementById('fileList');
+    if(!files.length){el.innerHTML='<div class="empty-state">No files yet.</div>';return;}
+    const icons={txt:'📄',md:'📝',csv:'📊',json:'{}',py:'🐍',js:'⚡',html:'🌐',pdf:'📕',docx:'📘'};
+    el.innerHTML=files.map(f=>{
+      const ext=f.name.split('.').pop().toLowerCase();
+      const icon=icons[ext]||'📄';
+      return `<div class="file-item" onclick="previewFile('${esc(f.folder)}','${esc(f.name)}',this)">
+        <span class="file-icon">${icon}</span>
+        <span class="file-name" title="${esc(f.name)}">${esc(f.name)}</span>
+        <div class="file-meta">${(f.size/1024).toFixed(1)}k<br>${f.modified||''}</div>
+        <button class="file-del" onclick="deleteFileDirect('${esc(f.folder)}','${esc(f.name)}',event)" title="Delete">×</button>
+      </div>`;
+    }).join('');
+  });
+}
+
+function previewFile(folder, name, el){
+  document.querySelectorAll('.file-item').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  fetch(`/files/${folder}/${name}`).then(r=>r.json()).then(d=>{
+    const box=document.getElementById('filePreviewBox');
+    box.style.display='block';
+    document.getElementById('filePreviewName').textContent=name;
+    document.getElementById('filePreviewContent').textContent=d.content||d.error;
+  });
+}
+
+function deleteFileDirect(folder, name, e){
+  e.stopPropagation();
+  if(!confirm(`Delete ${name}?`)) return;
+  fetch(`/files/${folder}/${name}`,{method:'DELETE'}).then(()=>loadFiles());
+}
+
+// ── DIRECT TASK ACTIONS ───────────────────────────────────────
+function quickAddTask(){
+  const input=document.getElementById('quickTaskInput');
+  const text=input.value.trim();
+  if(!text)return;
+  const priority=document.getElementById('quickPriority').value;
+  const due=document.getElementById('quickDue').value;
+  const msg=`Add task: "${text}" with ${priority} priority${due?' due '+due:''}`;
+  input.value=''; document.getElementById('quickDue').value='';
+  fillMsg(msg); sendMessage();
+}
+
+async function completeTaskDirect(idx){
+  await fetch(`/tasks/${idx}/complete`,{method:'POST'});
+  refreshPanels();
+}
+async function deleteTaskDirect(idx){
+  await fetch(`/tasks/${idx}`,{method:'DELETE'});
+  refreshPanels();
+}
+async function deleteNoteDirect(idx){
+  fillMsg(`Delete note number ${idx+1}`);
+  sendMessage();
+}
+
+// ── NOTE MODAL ────────────────────────────────────────────────
+function openNoteModal(){document.getElementById('noteModal').classList.add('show')}
+function closeNoteModal(){document.getElementById('noteModal').classList.remove('show')}
+function submitNote(){
+  const title=document.getElementById('noteTitle').value.trim();
+  const content=document.getElementById('noteContent').value.trim();
+  const tags=document.getElementById('noteTags').value.trim();
+  if(!title||!content){alert('Title and content required');return;}
+  closeNoteModal();
+  document.getElementById('noteTitle').value='';
+  document.getElementById('noteContent').value='';
+  document.getElementById('noteTags').value='';
+  fillMsg(`Add a note titled "${title}" with content: ${content}${tags?' Tags: '+tags:''}`);
+  sendMessage();
+}
+document.getElementById('noteModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeNoteModal()});
+
+// ── REFRESH ───────────────────────────────────────────────────
+function refreshPanels(){
+  fetch('/memory').then(r=>r.json()).then(m=>{updateMemory(m.facts);renderTasks(m.tasks)});
+  fetch('/notes').then(r=>r.json()).then(renderNotes);
+  loadFiles();
+}
+
+// ── SEND ──────────────────────────────────────────────────────
+async function sendMessage(){
+  if(busy)return;
+  const input=document.getElementById('msgInput');
+  const btn=document.getElementById('sendBtn');
+  const text=input.value.trim();
+  if(!text)return;
+
+  busy=true; input.value=''; input.style.height='40px'; btn.disabled=true;
+  setStatus('busy');
+  document.getElementById('sugsWrap').style.display='none';
+  addMsg('user',esc(text));
+  showThinking();
+
+  try{
+    const res=await fetch('/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:text,history,uploaded_file:attachedFile||null})
+    });
+    const data=await res.json();
+    hideThinking();
+
+    if(data.error){
+      addMsg('agent',`<span style="color:var(--rose2)">Error: ${esc(data.error)}</span>`);
+    } else {
+      const steps=data.steps||[];
+      const intermediary=steps.filter(s=>s.type!=='answer');
+      const answer=steps.find(s=>s.type==='answer');
+      if(intermediary.length) addSteps(intermediary);
+      if(answer) addMsg('agent',esc(answer.content).replace(/\n/g,'<br>'));
+      history=data.history||history;
+      if(data.memory){updateMemory(data.memory.facts);renderTasks(data.memory.tasks);}
+      if(data.notes) renderNotes(data.notes);
+      if(data.files||true) loadFiles();
+    }
+    if(attachedFile) clearAttach();
+  } catch(e){
+    hideThinking();
+    addMsg('agent',`<span style="color:var(--rose2)">Cannot reach agent server. Make sure <strong>app.py</strong> is running on port 5000.</span>`);
+  }
+
+  busy=false; btn.disabled=false; setStatus('ready');
+  input.focus();
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+addMsg('agent',[
+  'Hello! I\'m <strong>MyAgent</strong> — your smart personal assistant.',
+  '',
+  'I can <strong>search the web</strong>, do <strong>math</strong>, manage your <strong>tasks & notes</strong>, <strong>send/read emails</strong>, work with <strong>files</strong>, <strong>translate</strong>, run <strong>Python code</strong>, and more.',
+  '',
+  'Use the <strong>calculator bar</strong> (click 🧮 in the sidebar), <strong>upload files</strong> with 📎, <strong>add tasks</strong> in the right panel, or just ask me anything below.'
+].join('<br>'));
+
+// Initial data load
+refreshPanels();
+// Start on tasks tab
+document.getElementById('body-tasks').style.display='flex';
+document.getElementById('body-tasks').style.flexDirection='column';
+</script>
+</body>
+</html>

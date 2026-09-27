@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 700" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
+    </marker>
+    <style>
+      .box{fill:#fff;stroke:#334155;stroke-width:1.4;rx:8}
+      .llm{fill:#eef2ff;stroke:#4f46e5}
+      .tool{fill:#ecfdf5;stroke:#059669}
+      .io{fill:#f8fafc;stroke:#64748b}
+      .side{fill:#fff7ed;stroke:#c2410c}
+      .t{font-weight:600;fill:#0f172a}
+      .s{fill:#475569;font-size:11.5px}
+      .e{stroke:#475569;stroke-width:1.4;fill:none;marker-end:url(#a)}
+      .rec{stroke:#c2410c;stroke-width:1.4;fill:none;stroke-dasharray:5 4;marker-end:url(#r)}
+      .rl{fill:#c2410c;font-size:11.5px}
+      .h{font-size:17px;font-weight:700;fill:#0f172a}
+    </style>
+  </defs>
+  <rect width="980" height="700" fill="#ffffff"/>
+  <text x="24" y="32" class="h">Research agent: plan → act → verify → report</text>
+  <text x="24" y="52" class="s">Solid arrows = normal flow · dashed orange = self-correction paths · indigo = LLM call · green = tool</text>
+
+  <!-- goal -->
+  <rect x="24" y="76" width="200" height="62" class="box io"/>
+  <text x="38" y="100" class="t">Goal (CLI / web UI)</text>
+  <text x="38" y="118" class="s">--inject target:mode[:n]</text>
+  <text x="38" y="132" class="s">--interactive (clarify)</text>
+
+  <!-- planner -->
+  <rect x="290" y="76" width="230" height="62" class="box llm"/>
+  <text x="304" y="100" class="t">Planner</text>
+  <text x="304" y="118" class="s">understanding · ambiguities · assumptions</text>
+  <text x="304" y="132" class="s">2–6 steps · tool_hint + success test</text>
+  <path d="M224,107 H288" class="e"/>
+
+  <!-- fallback plan -->
+  <rect x="580" y="76" width="180" height="62" class="box side"/>
+  <text x="594" y="100" class="t">Fallback plan</text>
+  <text x="594" y="118" class="s">deterministic 4 steps if the</text>
+  <text x="594" y="132" class="s">LLM plan is still invalid</text>
+  <path d="M520,107 H578" class="rec"/>
+
+  <!-- step queue -->
+  <rect x="290" y="176" width="230" height="44" class="box io"/>
+  <text x="304" y="203" class="t">Step queue</text>
+  <path d="M405,138 V174" class="e"/>
+
+  <!-- step loop container -->
+  <rect x="24" y="250" width="736" height="250" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="3 3"/>
+  <text x="38" y="272" class="t">for each step</text>
+  <path d="M405,220 V296" class="e"/>
+
+  <!-- executor -->
+  <rect x="290" y="298" width="230" height="84" class="box llm"/>
+  <text x="304" y="322" class="t">Executor (bounded ReAct)</text>
+  <text x="304" y="340" class="s">thought → call_tool | finish (JSON)</text>
+  <text x="304" y="356" class="s">≤ N actions · duplicate-call guard</text>
+  <text x="304" y="372" class="s">sees prior step outputs + feedback</text>
+
+  <!-- registry -->
+  <rect x="44" y="298" width="200" height="84" class="box tool"/>
+  <text x="58" y="322" class="t">Tool registry</text>
+  <text x="58" y="340" class="s">arg validation · timeout</text>
+  <text x="58" y="356" class="s">retry + exp. backoff</text>
+  <text x="58" y="372" class="s">fault injection hook</text>
+  <path d="M290,326 H246" class="e"/>
+  <path d="M244,356 H288" class="e"/>
+  <text x="250" y="320" class="s">call</text>
+  <text x="250" y="372" class="s">obs.</text>
+
+  <!-- verifier -->
+  <rect x="290" y="412" width="230" height="70" class="box llm"/>
+  <text x="304" y="436" class="t">Verifier</text>
+  <text x="304" y="454" class="s">code checks + URL grounding, then</text>
+  <text x="304" y="470" class="s">LLM review vs success criteria</text>
+  <path d="M405,382 V410" class="e"/>
+
+  <!-- recovery column -->
+  <rect x="580" y="298" width="160" height="50" class="box side"/>
+  <text x="594" y="320" class="t">Retry step</text>
+  <text x="594" y="338" class="s">with reviewer feedback</text>
+  <rect x="580" y="370" width="160" height="50" class="box side"/>
+  <text x="594" y="392" class="t">Re-plan</text>
+  <text x="594" y="410" class="s">replace remaining steps</text>
+  <path d="M520,440 C556,440 560,335 578,330" class="rec"/>
+  <text x="532" y="468" class="rl">fail</text>
+  <path d="M580,318 C548,300 540,300 522,312" class="rec"/>
+  <path d="M660,348 V368" class="rec"/>
+  <text x="666" y="362" class="rl">fails again</text>
+  <path d="M740,395 H772 V208 H522" class="rec"/>
+  <path d="M670,138 V190 H522" class="rec"/>
+  <text x="600" y="224" class="rl">replacement steps</text>
+  <text x="600" y="184" class="rl">fallback steps</text>
+
+  <!-- tools -->
+  <rect x="24" y="530" width="170" height="72" class="box tool"/>
+  <text x="38" y="554" class="t">news_search</text>
+  <text x="38" y="570" class="s">DuckDuckGo news</text>
+  <text x="38" y="584" class="s">↳ Bing News RSS</text>
+  <text x="38" y="598" class="s">↳ Google News RSS</text>
+  <rect x="206" y="530" width="170" height="72" class="box tool"/>
+  <text x="220" y="554" class="t">web_search</text>
+  <text x="220" y="572" class="s">DuckDuckGo text</text>
+  <text x="220" y="588" class="s">↳ Wikipedia API</text>
+  <rect x="388" y="530" width="170" height="72" class="box tool"/>
+  <text x="402" y="554" class="t">fetch_page</text>
+  <text x="402" y="572" class="s">httpx + BeautifulSoup</text>
+  <text x="402" y="588" class="s">SSRF guard, min-text check</text>
+  <rect x="570" y="530" width="170" height="72" class="box tool"/>
+  <text x="584" y="554" class="t">calculator</text>
+  <text x="584" y="572" class="s">safe AST evaluator</text>
+  <text x="584" y="588" class="s">(no eval)</text>
+  <path d="M144,382 V528" class="e"/>
+  <text x="152" y="516" class="s">↳ = provider fallback</text>
+
+  <!-- reporter -->
+  <rect x="24" y="626" width="330" height="60" class="box llm"/>
+  <text x="38" y="650" class="t">Reporter</text>
+  <text x="38" y="668" class="s">JSON draft (repair loop) → fallback report if needed</text>
+  <text x="38" y="682" class="s">grounding: every cited URL checked against tool results</text>
+  <path d="M382,482 V612 H300 V624" class="e"/>
+  <text x="390" y="516" class="s">all steps done</text>
+  <rect x="400" y="626" width="340" height="60" class="box io"/>
+  <text x="414" y="650" class="t">runs/&lt;ts&gt;_&lt;goal&gt;/</text>
+  <text x="414" y="668" class="s">report.md · report.json · transcript.txt · trace.jsonl</text>
+  <path d="M354,656 H398" class="e"/>
+
+  <!-- cross-cutting -->
+  <rect x="790" y="76" width="170" height="610" rx="10" fill="#fafafa" stroke="#cbd5e1"/>
+  <text x="804" y="100" class="t">Cross-cutting</text>
+  <text x="804" y="130" class="t" font-size="12.5">LLM wrapper</text>
+  <text x="804" y="148" class="s">Groq (+ optional Cerebras)</text>
+  <text x="804" y="164" class="s">pace under tokens/minute</text>
+  <text x="804" y="180" class="s">retry 5xx · 429 Retry-After</text>
+  <text x="804" y="196" class="s">JSON salvage + repair</text>
+  <text x="804" y="212" class="s">token budget (soft cap)</text>
+  <text x="804" y="250" class="t" font-size="12.5">Failure injector</text>
+  <text x="804" y="268" class="s">timeout · error · empty</text>
+  <text x="804" y="284" class="s">bad_response · bad_json</text>
+  <text x="804" y="300" class="s">per tool / provider / llm</text>
+  <text x="804" y="338" class="t" font-size="12.5">Tracer</text>
+  <text x="804" y="356" class="s">every plan, thought, call,</text>
+  <text x="804" y="372" class="s">result, verdict, recovery</text>
+  <text x="804" y="388" class="s">→ console + trace.jsonl</text>
+  <text x="804" y="426" class="t" font-size="12.5">Budget spent / LLM down</text>
+  <text x="804" y="444" class="s">remaining steps skipped,</text>
+  <text x="804" y="460" class="s">report still written</text>
+  <text x="804" y="476" class="s">(report call is critical)</text>
+</svg>
